@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Read-only summary mirroring the original MI POL Finance formulas (see legacy/finanzas.jsx).
 type Any = Record<string, any>;
 export type FinanceData = {

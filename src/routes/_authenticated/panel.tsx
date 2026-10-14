@@ -75,7 +75,7 @@ function Panel() {
                           <AreaChart data={s.snapshots}>
                             <XAxis dataKey="date" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
                             <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" width={70} />
-                            <Tooltip formatter={(v: number) => fmtUSD(v)} />
+                            <Tooltip formatter={(v: any) => fmtUSD(Number(v))} />
                             <Area type="monotone" dataKey="value" stroke="var(--primary)" fill="var(--accent)" fillOpacity={0.15} />
                           </AreaChart>
                         </ResponsiveContainer>
