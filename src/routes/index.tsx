@@ -1,24 +1,31 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import logo from "@/assets/iris-logo.png.asset.json";
+import { Button } from "@/components/ui/button";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "IRIS · Plataforma financiera de MI POL" },
+      { name: "description", content: "Inteligencia, Responsabilidad, Inversión y Supervisión para la administración financiera de MI POL." },
+      { property: "og:title", content: "IRIS · Plataforma financiera de MI POL" },
+      { property: "og:description", content: "Inteligencia, Responsabilidad, Inversión y Supervisión." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-navy px-6 text-navy-foreground">
+      <img src={logo.url} alt="Logotipo IRIS" className="animate-rise h-56 w-56 rounded-full shadow-elegant ring-1 ring-silver/40 md:h-72 md:w-72" />
+      <h1 className="animate-rise mt-8 text-center text-4xl font-semibold tracking-wide md:text-5xl">IRIS</h1>
+      <p className="animate-rise mt-3 max-w-md text-center text-sm uppercase tracking-[0.3em] text-silver">
+        Inteligencia · Responsabilidad · Inversión · Supervisión
+      </p>
+      <Button asChild size="lg" variant="secondary" className="animate-rise mt-10 px-10">
+        <Link to="/auth">Acceso privado</Link>
+      </Button>
+      <p className="mt-6 text-xs text-silver/80">Uso exclusivo del personal autorizado de MI POL.</p>
+    </main>
   );
 }
