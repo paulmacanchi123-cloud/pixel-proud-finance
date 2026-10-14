@@ -64,8 +64,8 @@
   --color-silver: var(--silver);
   --color-navy: var(--navy);
   --color-navy-foreground: var(--navy-foreground);
-  --font-display: var(--font-display);
-  --font-sans: var(--font-sans);
+  --font-display: var(--iris-display);
+  --font-sans: var(--iris-sans);
   --shadow-elegant: var(--shadow-elegant);
 }
 
@@ -111,8 +111,8 @@
   --gradient-navy: linear-gradient(160deg, oklch(0.18 0.07 262), oklch(0.3 0.09 255) 60%, oklch(0.42 0.08 245));
   --gradient-silver: linear-gradient(135deg, oklch(0.97 0.005 250), oklch(0.86 0.015 250));
   --shadow-elegant: 0 18px 40px -18px color-mix(in oklab, var(--primary) 40%, transparent);
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Manrope", system-ui, sans-serif;
+  --iris-display: "Cormorant Garamond", Georgia, serif;
+  --iris-sans: "Manrope", system-ui, sans-serif;
 }
 
 @layer base {
@@ -131,4 +131,4 @@
 @utility shadow-elegant { box-shadow: var(--shadow-elegant); }
 @utility animate-rise { animation: rise 0.45s ease-out both; }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-@layer base { body { font-family: var(--font-sans); } h1, h2, h3 { font-family: var(--font-display); } }
+@layer base { body { font-family: var(--iris-sans); } h1, h2, h3 { font-family: var(--iris-display); } }
