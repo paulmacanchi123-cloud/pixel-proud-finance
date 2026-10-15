@@ -16,7 +16,7 @@ export function Stat({ label, value, tone = "default" }: { label: string; value:
   const toneCls = { default: "border-t-primary", good: "border-t-success", bad: "border-t-destructive", accent: "border-t-accent" }[tone];
   return (
     <div className={`rounded-lg border border-t-4 ${toneCls} bg-card p-4 shadow-sm`}>
-      <div className="font-display text-2xl font-semibold text-foreground">{value}</div>
+      <div className="font-display text-2xl font-semibold text-foreground lining-nums tabular-nums">{value}</div>
       <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
     </div>
   );
