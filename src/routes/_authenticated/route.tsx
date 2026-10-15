@@ -96,6 +96,7 @@ function Shell() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-3 border-b bg-card px-4 py-3 md:hidden">
           <button onClick={() => setOpen(!open)} aria-label="Menú">{open ? <X /> : <Menu />}</button>
+          <img src={logo.url} alt="IRIS" className="h-8 w-8 rounded-full" />
           <span className="font-display text-xl text-primary">IRIS</span>
         </header>
         <main className="min-w-0 flex-1 animate-rise"><Outlet /></main>
