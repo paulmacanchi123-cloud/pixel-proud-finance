@@ -765,7 +765,7 @@ function AssignPositionDialog({
           <Button
             disabled={!positionId || why.trim().length < 5 || act.busy}
             onClick={async () => {
-              if (!role) return;
+              if (!positionId) return;
               if (
                 await act.run({
                   userId,

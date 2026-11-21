@@ -56,12 +56,12 @@ describe("rpc()", () => {
       "Solo el CEO puede asignar roles privilegiados",
     );
     expect(calls.map((c) => c.fn)).toEqual(["org_assign_role", "org_log_denied"]);
-    expect(calls[1].args).toMatchObject({
+    expect(calls[1]?.args).toMatchObject({
       _action: "assign_role",
       _entity: "intento",
       _entity_id: "org_assign_role",
     });
-    expect(String(calls[1].args["_error"])).toMatch(/Solo el CEO/);
+    expect(String(calls[1]?.args["_error"])).toMatch(/Solo el CEO/);
   });
   it("no registra errores de validación (no son intentos de acceso)", async () => {
     const { ctx, calls } = ctxWith({

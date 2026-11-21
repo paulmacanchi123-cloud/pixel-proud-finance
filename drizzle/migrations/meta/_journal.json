@@ -8,6 +8,20 @@
       "when": 1792012559926,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795227728846,
+      "tag": "0001_iris_org_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795227835592,
+      "tag": "0002_iris_org_functions_rls",
+      "breakpoints": true
     }
   ]
 }

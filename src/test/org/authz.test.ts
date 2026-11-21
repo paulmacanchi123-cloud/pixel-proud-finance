@@ -156,7 +156,7 @@ describe("jerarquías", () => {
   it("construye el árbol y trata padres ausentes como raíz", () => {
     const tree = buildTree(items, (i) => i.parent);
     expect(tree.map((n) => n.item.id).sort()).toEqual(["ceo", "huerfano"]);
-    expect(tree.find((n) => n.item.id === "ceo").children[0].children[0].item.id).toBe("ger");
+    expect(tree.find((n) => n.item.id === "ceo")?.children[0]?.children[0]?.item.id).toBe("ger");
   });
   it("detecta ciclos antes de enviar al servidor", () => {
     expect(wouldCreateCycle(items, (i) => i.parent, "ceo", "ger")).toBe(true);

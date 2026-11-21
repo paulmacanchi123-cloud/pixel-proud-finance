@@ -189,7 +189,7 @@ export function SelectField({
       <Select
         value={value ?? NONE}
         onValueChange={(v) => onChange(v === NONE ? null : v)}
-        disabled={disabled}
+        disabled={disabled ?? false}
       >
         <SelectTrigger>
           <SelectValue placeholder={placeholder} />
@@ -197,7 +197,7 @@ export function SelectField({
         <SelectContent>
           <SelectItem value={NONE}>{placeholder}</SelectItem>
           {options.map((o) => (
-            <SelectItem key={o.value} value={o.value} disabled={o.disabled}>
+            <SelectItem key={o.value} value={o.value} disabled={o.disabled ?? false}>
               {o.label}
             </SelectItem>
           ))}

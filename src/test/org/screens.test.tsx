@@ -202,6 +202,7 @@ describe("Personas con un rol", () => {
     );
     const rows = screen.getAllByRole("row").slice(1);
     expect(rows).toHaveLength(3);
+    if (!rows[0] || !rows[1] || !rows[2]) throw new Error("Faltan asignaciones");
     expect(within(rows[0]).getByText("Vendedora Uno")).toBeTruthy();
     expect(within(rows[0]).getByText("Vigente")).toBeTruthy();
     expect(within(rows[1]).getByText("Vencida")).toBeTruthy();
@@ -383,6 +384,7 @@ describe("Permisos efectivos", () => {
     ];
     asAdmin(<EffectivePermissions />);
     const row = screen.getAllByRole("row")[1];
+    if (!row) throw new Error("Falta el permiso efectivo");
     expect(within(row).getByText("Ventas")).toBeTruthy();
     expect(within(row).getByText("Consultar")).toBeTruthy();
     expect(within(row).getByText("Solo propios")).toBeTruthy();
