@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Landmark, ClipboardCheck, Users, Building2, ScrollText, ShieldCheck, LogOut, Menu, X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useMe, type Me, type Permission } from "@/lib/iris";
+import { CEO_EMAIL, MissingProfileError, useMe, type Me, type Permission } from "@/lib/iris";
 import logo from "@/assets/iris-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ const NAV: NavItem[] = [
 ];
 
 function Shell() {
-  const { data: me, isLoading } = useMe();
+  const { data: me, isLoading, isFetching, error, refetch } = useMe();
   const qc = useQueryClient();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
@@ -60,7 +60,26 @@ function Shell() {
   }
 
   if (isLoading) return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Cargando IRIS…</div>;
-  if (!me) return <Blocked text="Tu cuenta no tiene un perfil válido en IRIS." onSignOut={signOut} />;
+  if (error instanceof MissingProfileError) {
+    const isCeo = error.email.toLowerCase() === CEO_EMAIL;
+    return <Blocked
+      title="Falta tu perfil de IRIS"
+      text={isCeo
+        ? "Tu cuenta sigue siendo la designada como CEO. Como administrador, revisa y ejecuta la reparación de perfiles antes de volver a entrar."
+        : "Tu cuenta no tiene un perfil en IRIS. Contacta al CEO para que revise tu acceso."}
+      onSignOut={signOut}
+    />;
+  }
+  if (error) {
+    return <Blocked
+      title="No pudimos cargar tu perfil"
+      text="Revisa tu conexión e inténtalo de nuevo. Si el problema continúa, contacta al CEO."
+      onSignOut={signOut}
+      onRetry={() => void refetch()}
+      retrying={isFetching}
+    />;
+  }
+  if (!me) return <Blocked title="No pudimos confirmar tu sesión" text="Cierra sesión y vuelve a entrar." onSignOut={signOut} />;
   if (me.status !== "active") return <Blocked text="Tu cuenta está suspendida o desactivada. Contacta al CEO." onSignOut={signOut} />;
   if (mfaNeeded) return <MfaChallenge factorId={mfaNeeded} onDone={() => setMfaNeeded(null)} onSignOut={signOut} />;
   if (me.mustChangePassword) return <ForcePassword onSignOut={signOut} />;
@@ -105,11 +124,21 @@ function Shell() {
   );
 }
 
-function Blocked({ text, onSignOut }: { text: string; onSignOut: () => void }) {
+function Blocked({ title = "Acceso no disponible", text, onSignOut, onRetry, retrying = false }: {
+  title?: string;
+  text: string;
+  onSignOut: () => void;
+  onRetry?: () => void;
+  retrying?: boolean;
+}) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center">
+      <h1 className="text-2xl font-semibold text-primary">{title}</h1>
       <p className="max-w-sm text-muted-foreground">{text}</p>
-      <Button variant="outline" onClick={onSignOut}>Cerrar sesión</Button>
+      <div className="flex flex-wrap justify-center gap-3">
+        {onRetry && <Button onClick={onRetry} disabled={retrying}>{retrying ? "Reintentando…" : "Reintentar"}</Button>}
+        <Button variant="outline" onClick={onSignOut}>Cerrar sesión</Button>
+      </div>
     </div>
   );
 }

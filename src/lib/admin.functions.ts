@@ -1,8 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { CEO_EMAIL } from "@/lib/iris";
 
-export const CEO_EMAIL = "mipol.company@gmail.com";
+export { CEO_EMAIL };
 
 const PERMISSIONS = [
   "view", "create", "edit", "delete", "export", "manage_accounts",
@@ -13,12 +14,15 @@ const permEnum = z.enum(PERMISSIONS);
 type Ctx = { supabase: any; userId: string };
 
 async function assertCeo(ctx: Ctx) {
-  const { data, error } = await ctx.supabase.rpc("is_ceo", { _user_id: ctx.userId });
+  // La sesión solo puede preguntar por su propio rol; nunca por el de un identificador arbitrario.
+  const { data, error } = await ctx.supabase.rpc("org_me_is_ceo");
   if (error || data !== true) throw new Error("Solo el CEO autorizado puede realizar esta acción.");
 }
 
 async function audit(ctx: Ctx, action: string, target: string, details: Record<string, unknown> = {}) {
-  await ctx.supabase.rpc("write_audit", { _action: action, _target: target, _details: details as any });
+  const { error } = await ctx.supabase.rpc("write_audit", { _action: action, _target: target, _details: details as any });
+  // La operación ya se realizó: no se revierte, pero un fallo de auditoría no debe pasar desapercibido.
+  if (error) console.error("[audit] write_audit falló:", action, error.message);
 }
 
 async function assertNotDirection(ctx: Ctx, departmentId: string) {

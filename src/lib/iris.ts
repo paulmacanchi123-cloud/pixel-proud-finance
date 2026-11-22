@@ -33,29 +33,53 @@ export type Me = {
   permissions: Set<Permission>;
 };
 
+export const CEO_EMAIL = "mipol.company@gmail.com";
+
+export class MissingProfileError extends Error {
+  readonly email: string;
+
+  constructor(email: string) {
+    super("No existe un perfil para este usuario.");
+    this.name = "MissingProfileError";
+    this.email = email;
+  }
+}
+
+export async function fetchMe(client: typeof supabase = supabase): Promise<Me | null> {
+  const { data: u, error: userError } = await client.auth.getUser();
+  if (userError) throw userError;
+  if (!u.user) return null;
+
+  const [profileResult, rolesResult, permissionsResult] = await Promise.all([
+    client.from("profiles").select("id,email,full_name,status,must_change_password,department:departments!profiles_department_id_fkey(id,code,name)").eq("id", u.user.id).maybeSingle(),
+    client.from("user_roles").select("role").eq("user_id", u.user.id),
+    client.rpc("my_permissions"),
+  ]);
+  if (profileResult.error) throw profileResult.error;
+  if (rolesResult.error) throw rolesResult.error;
+  if (permissionsResult.error) throw permissionsResult.error;
+
+  const p = profileResult.data;
+  if (!p) throw new MissingProfileError(u.user.email ?? "");
+  const roles = rolesResult.data ?? [];
+  const permissions = permissionsResult.data ?? [];
+  return {
+    id: p.id,
+    email: p.email,
+    fullName: p.full_name,
+    status: p.status,
+    mustChangePassword: p.must_change_password,
+    department: (p.department as any) ?? null,
+    isCeo: roles.some((r) => r.role === "ceo"),
+    permissions: new Set(permissions as Permission[]),
+  };
+}
+
 export function useMe() {
   return useQuery({
     queryKey: ["me"],
-    queryFn: async (): Promise<Me | null> => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return null;
-      const [{ data: p }, { data: roles }, { data: perms }] = await Promise.all([
-        supabase.from("profiles").select("id,email,full_name,status,must_change_password,department:departments(id,code,name)").eq("id", u.user.id).maybeSingle(),
-        supabase.from("user_roles").select("role").eq("user_id", u.user.id),
-        supabase.rpc("my_permissions"),
-      ]);
-      if (!p) return null;
-      return {
-        id: p.id,
-        email: p.email,
-        fullName: p.full_name,
-        status: p.status,
-        mustChangePassword: p.must_change_password,
-        department: (p.department as any) ?? null,
-        isCeo: (roles ?? []).some((r) => r.role === "ceo"),
-        permissions: new Set((perms ?? []) as Permission[]),
-      };
-    },
+    queryFn: () => fetchMe(),
+    retry: (failureCount, error) => !(error instanceof MissingProfileError) && failureCount < 2,
   });
 }
 
