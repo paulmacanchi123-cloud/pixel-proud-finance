@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { LEGACY_MAP } from "@/lib/org/legacy-map";
 
 const sql0000 = readFileSync("drizzle/migrations/0000_migration.sql", "utf8");
-const sql0005 = readFileSync("src/lib/org/legacy-map.ts", "utf8");
+const sqlSeed = readFileSync("supabase/seed.sql", "utf8");
+const sqlAuthz = readFileSync("drizzle/migrations/0003_iris_org_authz_security.sql", "utf8");
 
 // Valores del enum iris_permission definidos en la migración original
 const enumValues = [
@@ -12,9 +13,9 @@ const enumValues = [
   ),
 ].map((m) => m[1]);
 
-// Filas de org_legacy_map en la migración 0005
+// Filas de org_legacy_map en la semilla reproducible
 const sqlRows = [
-  ...sql0005.matchAll(
+  ...sqlSeed.matchAll(
     /\('([a-z_]+)',\s*(null|'[a-z_]+'),\s*(null|'[a-z_]+'),\s*'(equivalente|sin_equivalencia)'/g,
   ),
 ].map((m) => ({
@@ -55,8 +56,8 @@ describe("equivalencias legacy → nuevo", () => {
     expect(t?.note).toMatch(/CEO/);
   });
   it("el modo por defecto es legacy y union/org nacen bloqueados", () => {
-    expect(sql0005).toMatch(/mode\s+text not null default 'legacy'/);
-    expect(sql0005).toMatch(/enforcement_unlocked boolean not null default false/);
-    expect(sql0005).toMatch(/require_mfa_admin\s+boolean not null default false/);
+    expect(sqlAuthz).toMatch(/mode\s+text not null default 'legacy'/i);
+    expect(sqlAuthz).toMatch(/enforcement_unlocked boolean not null default false/i);
+    expect(sqlAuthz).toMatch(/require_mfa_admin\s+boolean not null default false/i);
   });
 });

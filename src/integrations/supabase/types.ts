@@ -995,6 +995,13 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_permission_legacy: {
+        Args: {
+          _perm: Database["public"]["Enums"]["iris_permission"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1030,6 +1037,24 @@ export type Database = {
           _valid_until: string
         }
         Returns: string
+      }
+      org_audit_insert: {
+        Args: { _action: string; _details: Json; _target: string }
+        Returns: undefined
+      }
+      org_authz_diff: {
+        Args: never
+        Returns: {
+          department_code: string
+          email: string
+          legacy_result: boolean
+          legacy_source: string
+          map_status: string
+          mapped_to: string
+          org_result: boolean
+          perm: Database["public"]["Enums"]["iris_permission"]
+          user_id: string
+        }[]
       }
       org_can_audit: { Args: never; Returns: boolean }
       org_can_read_catalog: { Args: never; Returns: boolean }
@@ -1087,6 +1112,15 @@ export type Database = {
         Args: { _assignment: string; _reason: string }
         Returns: undefined
       }
+      org_get_authz_config: {
+        Args: never
+        Returns: {
+          enforcement_unlocked: boolean
+          mode: string
+          require_mfa_admin: boolean
+          updated_at: string
+        }[]
+      }
       org_is_active_user: { Args: { _uid: string }; Returns: boolean }
       org_list_users: {
         Args: never
@@ -1119,6 +1153,31 @@ export type Database = {
         }
         Returns: undefined
       }
+      org_me_has_permission: {
+        Args: { _perm: Database["public"]["Enums"]["iris_permission"] }
+        Returns: boolean
+      }
+      org_me_has_role: {
+        Args: { _role: Database["public"]["Enums"]["app_role"] }
+        Returns: boolean
+      }
+      org_me_is_ceo: { Args: never; Returns: boolean }
+      org_migration_plan: {
+        Args: never
+        Returns: {
+          department_code: string
+          email: string
+          granted: boolean
+          legacy_perm: Database["public"]["Enums"]["iris_permission"]
+          map_status: string
+          note: string
+          org_action: string
+          org_resource: string
+          proposed_role: string
+          source: string
+          user_id: string
+        }[]
+      }
       org_my_permissions: {
         Args: never
         Returns: {
@@ -1130,6 +1189,13 @@ export type Database = {
         }[]
       }
       org_need_reason: { Args: { _reason: string }; Returns: undefined }
+      org_permission_mapped: {
+        Args: {
+          _perm: Database["public"]["Enums"]["iris_permission"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       org_revoke_role: {
         Args: { _assignment: string; _reason: string }
         Returns: undefined
@@ -1139,6 +1205,10 @@ export type Database = {
         Returns: undefined
       }
       org_role_is_privileged: { Args: { _role: string }; Returns: boolean }
+      org_set_authz_mode: {
+        Args: { _mode: string; _reason: string }
+        Returns: undefined
+      }
       org_set_department_active: {
         Args: { _active: boolean; _id: string; _reason: string }
         Returns: undefined
@@ -1153,6 +1223,10 @@ export type Database = {
       }
       org_set_position_roles: {
         Args: { _position: string; _role_ids: string[] }
+        Returns: undefined
+      }
+      org_set_require_mfa_admin: {
+        Args: { _on: boolean; _reason: string }
         Returns: undefined
       }
       org_set_role_active: {
@@ -1180,6 +1254,19 @@ export type Database = {
       org_set_user_department: {
         Args: { _department: string; _reason: string; _user: string }
         Returns: undefined
+      }
+      org_shadow_report: {
+        Args: never
+        Returns: {
+          email: string
+          first_seen: string
+          hits: number
+          last_seen: string
+          legacy_result: boolean
+          org_result: boolean
+          perm: Database["public"]["Enums"]["iris_permission"]
+          user_id: string
+        }[]
       }
       org_sod_conflicts_if: {
         Args: { _also?: string[]; _new: string[]; _user: string }
