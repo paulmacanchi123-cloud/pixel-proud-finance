@@ -16,3 +16,9 @@
 - [x] Repair the incomplete organizational test fixtures and run authorization, backend, type and build checks.
 - [x] Report changed files, applied migrations, executed tests and remaining limitations; do not deploy.
 - [ ] Visually review the organization screens with the real CEO after the mandatory password change; blocked because only the CEO may choose the new password.
+
+## Final authorization sweep
+
+- [ ] Inspect every organization screen, mutation, server function, policy and background entry point for scoped authorization and self-escalation.
+- [ ] Fix only violations inside Departments and Permissions; leave unrelated modules and settled records unchanged.
+- [ ] Repeat focused and full verification, then report each checked place and any remaining limitation.
