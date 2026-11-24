@@ -41,7 +41,7 @@ import {
 type DenyTarget = { kind: "deny" | "lift"; permissionId: string };
 
 export function EffectivePermissions() {
-  const { can, userId: me } = useAccess();
+  const { can, isCeo, userId: me } = useAccess();
   const { data: users = [] } = useOrgUsers();
   const { data: depts = [] } = useDepartments();
   const { data: defs = [] } = usePermissionDefs();
@@ -57,7 +57,7 @@ export function EffectivePermissions() {
   const [target, setTarget] = useState<DenyTarget | null>(null);
   const act = useAct<unknown>(setUserDeny, "Permiso actualizado");
 
-  const canDeny = can("permisos", "administrar") && !!userId && userId !== me;
+  const canDeny = isCeo && can("permisos", "administrar") && !!userId && userId !== me;
   const resName = (c: string) => resources.find((r) => r.code === c)?.name ?? c;
   const roleName = (id: string) => roles.find((r) => r.id === id)?.name ?? "—";
   const deptName = (id: string | null) => depts.find((d) => d.id === id)?.name;

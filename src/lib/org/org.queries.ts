@@ -60,6 +60,17 @@ export const useMyOrgPermissions = () =>
     queryKey: k("my-permissions"),
     queryFn: () => call<MyPermission[]>("org_my_permissions"),
   });
+
+/** Nivel real de la sesión: la interfaz nunca presupone aal2 para permisos que exigen MFA. */
+export const useCurrentAal2 = () =>
+  useQuery({
+    queryKey: ["auth", "aal2"],
+    queryFn: async () => {
+      const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (error) throw new Error(error.message);
+      return data?.currentLevel === "aal2";
+    },
+  });
 export const useDepartments = () =>
   useQuery({
     queryKey: k("departments"),

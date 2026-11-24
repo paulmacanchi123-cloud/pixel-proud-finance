@@ -61,8 +61,8 @@ const isCurrent = (a: {
 
 export function UserAssignments() {
   const { can, isCeo, userId: me } = useAccess();
-  const canRoles = can("roles", "administrar");
-  const canPositions = can("cargos", "administrar");
+  const canRoles = isCeo && can("roles", "administrar");
+  const canPositions = isCeo && can("cargos", "administrar");
   const { data: users = [], error: usersError, isLoading: usersLoading } = useOrgUsers();
   const { data: depts = [] } = useDepartments();
   const { data: roles = [] } = useRoles();

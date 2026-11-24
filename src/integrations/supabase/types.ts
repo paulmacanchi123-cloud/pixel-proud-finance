@@ -826,6 +826,7 @@ export type Database = {
         Row: {
           created_at: string
           department_id: string | null
+          department_is_explicit: boolean
           granted_by: string
           id: string
           justification: string
@@ -840,6 +841,7 @@ export type Database = {
         Insert: {
           created_at?: string
           department_id?: string | null
+          department_is_explicit?: boolean
           granted_by: string
           id?: string
           justification: string
@@ -854,6 +856,7 @@ export type Database = {
         Update: {
           created_at?: string
           department_id?: string | null
+          department_is_explicit?: boolean
           granted_by?: string
           id?: string
           justification?: string

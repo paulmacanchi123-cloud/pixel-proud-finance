@@ -11,11 +11,14 @@ const state = vi.hoisted(() => ({
     require_mfa: boolean;
   }[],
   loading: false,
+  aal2: true,
+  aalLoading: false,
 }));
 
 vi.mock("@/lib/iris", () => ({ useMe: () => ({ data: state.me }) }));
 vi.mock("@/lib/org/org.queries", () => ({
   useMyOrgPermissions: () => ({ data: state.perms, isLoading: state.loading }),
+  useCurrentAal2: () => ({ data: state.aal2, isLoading: state.aalLoading, error: null }),
 }));
 for (const [file, name] of [
   ["OrgChart", "OrgChart"],
@@ -79,7 +82,7 @@ describe("Departamentos y Permisos: visibilidad de las secciones según permisos
       screen.getByText(/No tienes permisos para consultar la estructura organizacional/),
     ).toBeTruthy();
   });
-  it("administrador de organización delegado: gestiona estructura y roles, sin Historial ni Migración", async () => {
+  it("administrador de organización delegado: consulta estructura y roles, sin Historial ni Migración", async () => {
     state.me = { id: "adm", isCeo: false };
     state.perms = [
       perm("departamentos", "consultar"),
@@ -125,5 +128,14 @@ describe("Departamentos y Permisos: visibilidad de las secciones según permisos
     state.perms = [perm("ventas", "consultar", "propio")];
     await renderPage();
     expect(tabs()).toEqual([]);
+  });
+  it("un permiso que exige MFA no habilita secciones con una sesión aal1", async () => {
+    state.me = { id: "u-mfa", isCeo: false };
+    state.perms = [{ ...perm("departamentos", "consultar"), require_mfa: true }];
+    state.aal2 = false;
+    await renderPage();
+    expect(tabs()).toEqual([]);
+    expect(screen.getByText(/No tienes permisos para consultar/)).toBeTruthy();
+    state.aal2 = true;
   });
 });

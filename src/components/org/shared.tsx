@@ -38,18 +38,20 @@ export function AccessProvider({
   isCeo,
   userId,
   perms,
+  aal2 = false,
   children,
 }: {
   isCeo: boolean;
   userId: string;
   perms: MyPermission[];
+  aal2?: boolean;
   children: ReactNode;
 }) {
   const value: Access = {
     isCeo,
     userId,
     can: (resource, action) =>
-      canCheck(perms, resource, action, { isCeo, anyScope: true, aal2: true }),
+      canCheck(perms, resource, action, { isCeo, anyScope: true, aal2 }),
   };
   return <AccessCtx.Provider value={value}>{children}</AccessCtx.Provider>;
 }

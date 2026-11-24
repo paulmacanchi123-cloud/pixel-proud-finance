@@ -22,3 +22,10 @@
 - [ ] Inspect every organization screen, mutation, server function, policy and background entry point for scoped authorization and self-escalation.
 - [ ] Fix only violations inside Departments and Permissions; leave unrelated modules and settled records unchanged.
 - [ ] Repeat focused and full verification, then report each checked place and any remaining limitation.
+
+## Unified department changes
+
+- [ ] Replace the legacy setUserDepartment mechanism with the secure organization function while preserving its import path.
+- [ ] Distinguish profile-linked departmental roles from explicitly scoped roles and update only profile-linked scopes after a move.
+- [ ] Verify previous-head removal, old/new traceability, organization history, audit, effective permissions and duplicate prevention with a temporary user.
+- [ ] Run focused and full tests, typecheck, build and real server-function verification without changing unrelated modules.

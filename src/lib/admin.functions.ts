@@ -101,18 +101,10 @@ export const setUserStatus = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const setUserDepartment = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ userId: z.string().uuid(), departmentId: z.string().uuid() }).parse(d))
-  .handler(async ({ data, context }) => {
-    await assertCeo(context);
-    if (data.userId === context.userId) throw new Error("No puedes modificar tu propio departamento.");
-    await assertNotDirection(context, data.departmentId);
-    const { error } = await context.supabase.from("profiles").update({ department_id: data.departmentId }).eq("id", data.userId);
-    if (error) throw new Error(error.message);
-    await audit(context, "user_department_changed", data.userId, { departmentId: data.departmentId });
-    return { ok: true };
-  });
+// Alias de compatibilidad: no existe un segundo mecanismo para cambiar departamentos.
+// La función única exige motivo, retira la responsabilidad anterior, actualiza los alcances
+// departamentales vinculados al perfil y registra historial organizativo + auditoría.
+export { moveUserDepartment as setUserDepartment } from "@/lib/org/org.functions";
 
 export const setUserPermission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

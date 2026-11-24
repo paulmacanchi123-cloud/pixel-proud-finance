@@ -67,7 +67,7 @@ const empty: Draft = {
 
 export function DepartmentsManager() {
   const { can, isCeo } = useAccess();
-  const canAdmin = can("departamentos", "administrar");
+  const canAdmin = isCeo && can("departamentos", "administrar");
   const deptsQ = useDepartments();
   const depts = useMemo(() => deptsQ.data ?? [], [deptsQ.data]);
   const { data: posAssigns = [] } = usePositionAssignments();
@@ -116,7 +116,7 @@ export function DepartmentsManager() {
     >
       {!canAdmin && (
         <ReadOnlyNote>
-          Tienes acceso de solo lectura. Administrar departamentos requiere un rol con esa facultad.
+          Tienes acceso de solo lectura. La administración de departamentos está reservada al CEO.
         </ReadOnlyNote>
       )}
       <div className="my-3 flex flex-wrap items-center gap-4">

@@ -65,7 +65,7 @@ const empty: Draft = { id: null, code: "", name: "", description: "", isPrivileg
 
 export function RolesEditor({ onOpenMatrix }: { onOpenMatrix: (roleId: string) => void }) {
   const { can, isCeo } = useAccess();
-  const canAdmin = can("roles", "administrar");
+  const canAdmin = isCeo && can("roles", "administrar");
   const rolesQ = useRoles();
   const { data: roles = [] } = rolesQ;
   const permsQ = useRolePermissions();
@@ -125,10 +125,10 @@ export function RolesEditor({ onOpenMatrix }: { onOpenMatrix: (roleId: string) =
       }
     >
       <ReadOnlyNote>
-        Los roles agrupan permisos (recurso · acción · alcance). Los roles con poder de{" "}
-        <strong>administrar, aprobar o auditar</strong> son privilegiados: solo el CEO los crea,
-        edita y asigna. Los roles en conflicto de funciones no pueden coexistir sin una excepción
-        vigente aprobada por el CEO.
+        Los roles agrupan permisos (recurso · acción · alcance). Su administración y asignación
+        están reservadas al CEO. Los roles con poder de <strong>administrar, aprobar o auditar</strong>
+        son privilegiados y no pueden coexistir en conflicto de funciones sin una excepción vigente
+        aprobada por el CEO.
       </ReadOnlyNote>
       <div className="my-3 flex flex-wrap items-end gap-3">
         <Input
@@ -373,9 +373,7 @@ export function PermissionMatrix({
   const { data: rolePerms = [] } = useRolePermissions();
   const act = useAct<unknown>(setRolePermission, "Permiso actualizado");
   const role = roles.find((r) => r.id === roleId) ?? null;
-  const priv = role ? isPrivilegedRole(role, rolePerms, defs) : false;
-  const canEditRole =
-    !!role && can("permisos", "administrar") && (isCeo || (!role.is_system && !priv));
+  const canEditRole = !!role && isCeo && can("permisos", "administrar");
   const mine = new Map(
     rolePerms.filter((p) => p.role_id === roleId).map((p) => [p.permission_id, p]),
   );
@@ -400,13 +398,7 @@ export function PermissionMatrix({
         <>
           {!canEditRole && (
             <ReadOnlyNote>
-              Matriz en solo lectura
-              {role.is_system || priv
-                ? ": los roles del sistema o privilegiados solo los edita el CEO"
-                : ""}
-              .{" "}
-              {!isCeo &&
-                "Los permisos sensibles (aprobar, exportar, administrar, auditar, eliminar) solo los otorga el CEO."}
+              Matriz en solo lectura: la administración de roles y permisos está reservada al CEO.
             </ReadOnlyNote>
           )}
           <p className="my-2 text-xs text-muted-foreground">

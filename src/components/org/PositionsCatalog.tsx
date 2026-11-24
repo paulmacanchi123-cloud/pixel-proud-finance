@@ -72,7 +72,7 @@ const empty: Draft = {
 
 export function PositionsCatalog() {
   const { can, isCeo } = useAccess();
-  const canAdmin = can("cargos", "administrar");
+  const canAdmin = isCeo && can("cargos", "administrar");
   const positionsQ = usePositions();
   const positions = useMemo(() => positionsQ.data ?? [], [positionsQ.data]);
   const { data: posAssigns = [] } = usePositionAssignments();

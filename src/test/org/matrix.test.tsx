@@ -70,14 +70,15 @@ const adminPerms: MyPermission[] = [
 ];
 
 describe("Matriz de permisos (UI)", () => {
-  it("administrador delegado: puede editar permisos normales pero NO los sensibles", () => {
+  it("un rol administrativo que no es CEO ve toda la matriz en solo lectura", () => {
     render(
       <AccessProvider isCeo={false} userId="u1" perms={adminPerms}>
         <PermissionMatrix roleId="r1" onRoleChange={() => {}} />
       </AccessProvider>,
     );
-    expect((screen.getByTitle("Global") as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByTitle("Global") as HTMLButtonElement).disabled).toBe(true);
     expect((screen.getByTitle("Global · sensible") as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.getByText(/solo lectura/i)).toBeTruthy();
   });
 
   it("sin permiso de administrar permisos: matriz de solo lectura", () => {
