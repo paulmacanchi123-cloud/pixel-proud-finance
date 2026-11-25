@@ -32,4 +32,4 @@
 
 ## Live site
 
-- [ ] Publish the current version so iris-pol.lovable.app carries the latest security and profile fixes.
+- [ ] Publish the current version so iris-pol.lovable.app carries the latest security and profile fixes. Publish requested and captured as commit de32821; at the last check (~2.5 min later) the live site still served the previous build, so re-check it.
