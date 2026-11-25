@@ -368,7 +368,7 @@ export default function FinanzasApp({ initialData, onSave, readOnly = false, can
       negocio: D.businesses.find((b) => b.id === m.businessId)?.name || "",
       persona: m.person, metodo_pago: m.paymentMethod, notas: m.notes, estado: m.status,
     }));
-    download("movimientos.csv", Papa.unparse(rows), "text/csv");
+    download("movimientos.csv", Papa.unparse(rows, { escapeFormulae: true }), "text/csv");
   };
 
   const exportSummary = () => {

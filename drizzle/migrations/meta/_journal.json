@@ -36,6 +36,13 @@
       "when": 1795516594099,
       "tag": "0004_iris_unify_department_moves",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795603448946,
+      "tag": "0005_restrict_department_reads",
+      "breakpoints": true
     }
   ]
 }
