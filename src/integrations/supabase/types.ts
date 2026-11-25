@@ -1156,6 +1156,11 @@ export type Database = {
         }
         Returns: undefined
       }
+      org_me_can_see_department: { Args: { _dept: string }; Returns: boolean }
+      org_me_can_see_department_perms: {
+        Args: { _dept: string }
+        Returns: boolean
+      }
       org_me_has_permission: {
         Args: { _perm: Database["public"]["Enums"]["iris_permission"] }
         Returns: boolean
