@@ -15,7 +15,7 @@
 - [x] Connect the existing department and permission screens to the integrated real-data behavior.
 - [x] Repair the incomplete organizational test fixtures and run authorization, backend, type and build checks.
 - [x] Report changed files, applied migrations, executed tests and remaining limitations; do not deploy.
-- [ ] Visually review the organization screens with the real CEO after the mandatory password change; blocked because only the CEO may choose the new password.
+- [x] Visually review the organization screens with the real CEO after the mandatory password change; all nine tabs render real cloud data with no console errors.
 
 ## Final authorization sweep
 
@@ -29,3 +29,7 @@
 - [x] Distinguish profile-linked departmental roles from explicitly scoped roles and update only profile-linked scopes after a move.
 - [x] Verify previous-head removal, old/new traceability, organization history, audit, effective permissions and duplicate prevention with a temporary user.
 - [x] Run focused and full tests, typecheck, build and real server-function verification without changing unrelated modules.
+
+## Live site
+
+- [ ] Publish the current version so iris-pol.lovable.app carries the latest security and profile fixes.
