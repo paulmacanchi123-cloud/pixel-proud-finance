@@ -50,6 +50,13 @@
       "when": 1795603828265,
       "tag": "0006_fix_department_read_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795689883805,
+      "tag": "0007_restrict_is_ceo_lookup",
+      "breakpoints": true
     }
   ]
 }
